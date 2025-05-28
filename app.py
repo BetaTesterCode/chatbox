@@ -256,28 +256,66 @@ def send_message():
         })
 
     # Manejo de selección de equipos (Laptops y PCs)
-    elif 'laptop' in user_message_lower or 'computadora' in user_message_lower or 'pc' in user_message_lower:
-        if 'gaming' in user_message_lower or 'juegos' in user_message_lower:
+    elif 'laptop' in user_message_lower or 'computadora' in user_message_lower or 'pc' in user_message_lower or 'juegos' in user_message_lower or 'gaming' in user_message_lower:
+        # Si solo dice 'juegos' o 'gaming' sin especificar laptop/pc, preguntar primero
+        if ('juegos' in user_message_lower or 'gaming' in user_message_lower) and not any(term in user_message_lower for term in ['laptop', 'computadora', 'pc']):
+             response = "¡Excelente elección! Para juegos te recomiendo equipos con buen rendimiento. ¿Tienes preferencia por laptop o PC, o te gustaría ver ambas opciones?\n\n"
+             response += "Tenemos opciones para:\n"
+             response += "🎮 Gaming/Juegos (Laptops y PCs)\n"
+             response += "💼 Trabajo Profesional (Laptops y PCs)\n"
+             response += "📚 Estudio (Laptops y PCs)\n\n"
+             response += "¿Qué tipo de equipo te interesa para juegos?"
+             return jsonify({'response': response})
+
+        # Si especifica 'gaming' o 'juegos' Y 'laptop'/'pc'
+        elif 'gaming' in user_message_lower or 'juegos' in user_message_lower:
             response = "¡Excelente elección! Para gaming te recomiendo equipos con buen rendimiento. ¿Tienes un presupuesto en mente?\n\n"
             response += "Tenemos estas opciones:\n\n"
-            response += "**Laptops Gaming:**\n"
-            for laptop in productos['laptops']['gaming'].values():
-                response += f"📱 {laptop['nombre']}\n"
-                response += f"💰 {laptop['precio']}\n"
-                response += "Especificaciones:\n"
-                for key, value in laptop['especificaciones'].items():
-                    response += f"- {key.replace('_', ' ').title()}: {value}\n"
-                response += f"📝 {laptop['descripcion']}\n\n"
-            
-            response += "**PCs Gaming:**\n"
-            for pc in productos['desktops']['gaming'].values():
-                response += f"🖥️ {pc['nombre']}\n"
-                response += f"💰 {pc['precio']}\n"
-                response += "Especificaciones:\n"
-                for key, value in pc['especificaciones'].items():
-                    response += f"- {key.replace('_', ' ').title()}: {value}\n"
-                response += f"📝 {pc['descripcion']}\n\n"
-            
+
+            if any(term in user_message_lower for term in ['laptop']):
+                response += "**Laptops Gaming:**\n"
+                for laptop in productos['laptops']['gaming'].values():
+                    response += f"📱 {laptop['nombre']}\n"
+                    response += f"💰 {laptop['precio']}\n"
+                    response += "Especificaciones:\n"
+                    for key, value in laptop['especificaciones'].items():
+                        response += f"- {key.replace('_', ' ').title()}: {value}\n"
+                    response += f"📝 {laptop['descripcion']}\n\n"
+
+            if any(term in user_message_lower for term in ['computadora', 'pc']):
+                response += "**PCs Gaming:**\n"
+                for pc in productos['desktops']['gaming'].values():
+                    response += f"🖥️ {pc['nombre']}\n"
+                    response += f"💰 {pc['precio']}\n"
+                    response += "Especificaciones:\n"
+                    for key, value in pc['especificaciones'].items():
+                        response += f"- {key.replace('_', ' ').title()}: {value}\n"
+                    response += f"📝 {pc['descripcion']}\n\n"
+
+            if not any(term in user_message_lower for term in ['laptop', 'computadora', 'pc']):
+                 # Si se preguntó solo por gaming/juegos, pero no se especificó laptop/pc, mostrar ambas
+                 response = "¡Excelente elección! Para gaming te recomiendo equipos con buen rendimiento. ¿Tienes un presupuesto en mente?\n\n"
+                 response += "Tenemos estas opciones:\n\n"
+
+                 response += "**Laptops Gaming:**\n"
+                 for laptop in productos['laptops']['gaming'].values():
+                     response += f"📱 {laptop['nombre']}\n"
+                     response += f"💰 {laptop['precio']}\n"
+                     response += "Especificaciones:\n"
+                     for key, value in laptop['especificaciones'].items():
+                         response += f"- {key.replace('_', ' ').title()}: {value}\n"
+                     response += f"📝 {laptop['descripcion']}\n\n"
+
+                 response += "**PCs Gaming:**\n"
+                 for pc in productos['desktops']['gaming'].values():
+                     response += f"🖥️ {pc['nombre']}\n"
+                     response += f"💰 {pc['precio']}\n"
+                     response += "Especificaciones:\n"
+                     for key, value in pc['especificaciones'].items():
+                         response += f"- {key.replace('_', ' ').title()}: {value}\n"
+                     response += f"📝 {pc['descripcion']}\n\n"
+
+
             response += "¿Cuál de estas opciones te interesa más? ¿O prefieres ver otras alternativas?"
             return jsonify({'response': response})
 

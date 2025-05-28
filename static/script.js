@@ -19,6 +19,9 @@ function sendMessage() {
     userMessageDiv.classList.add('message');
     userMessageDiv.textContent = message; // Display only the message text
 
+    // Add the user-message class to the message content div
+    userMessageDiv.classList.add('user-message');
+
     userMessageContainer.appendChild(userMessageDiv);
     userMessageContainer.appendChild(userAvatarDiv);
     chatBox.appendChild(userMessageContainer);
@@ -46,6 +49,8 @@ function sendMessage() {
 
         const botMessageDiv = document.createElement('div');
         botMessageDiv.classList.add('message');
+        // Add the bot-message class to the message content div
+        botMessageDiv.classList.add('bot-message');
         // Use innerHTML and convertMarkdownToHtml
         botMessageDiv.innerHTML = convertMarkdownToHtml(botResponse);
 
