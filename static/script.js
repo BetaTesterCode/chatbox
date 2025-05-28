@@ -46,21 +46,12 @@ function sendMessage() {
 
         const botMessageDiv = document.createElement('div');
         botMessageDiv.classList.add('message');
-        botMessageDiv.textContent = botResponse;
+        // Use innerHTML and convertMarkdownToHtml
+        botMessageDiv.innerHTML = convertMarkdownToHtml(botResponse);
 
         botMessageContainer.appendChild(botAvatarDiv);
         botMessageContainer.appendChild(botMessageDiv);
         chatBox.appendChild(botMessageContainer);
-
-        // Read the bot's response aloud using Web Speech API
-        if ('speechSynthesis' in window) {
-            const utterance = new SpeechSynthesisUtterance(botResponse);
-            // Optional: Set language, voice, pitch, rate, volume
-            utterance.lang = 'es-ES'; // Set language to Spanish
-            window.speechSynthesis.speak(utterance);
-        } else {
-            console.warn('Web Speech API not supported in this browser.');
-        }
 
         // Scroll to the bottom of the chat box
         chatBox.scrollTop = chatBox.scrollHeight;
@@ -84,4 +75,13 @@ document.getElementById('user-input').addEventListener('keypress', function(even
     if (event.key === 'Enter') {
         sendMessage();
     }
-}); 
+});
+
+// Function to convert basic Markdown to HTML
+function convertMarkdownToHtml(text) {
+    // Convert **bold** to <strong>bold</strong>
+    let html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+    // Convert newline to <br>
+    html = html.replace(/\n/g, '<br>');
+    return html;
+} 

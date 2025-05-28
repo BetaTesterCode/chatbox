@@ -5,41 +5,212 @@ from fuzzywuzzy import process # Importar fuzzywuzzy
 
 app = Flask(__name__)
 
-# Diccionario de productos y precios
-products = {
-    'epson l3250': 'S/ 699.00 (efectivo/transferencia) o S/ 730.00 (tarjeta)',
-    'epson l4260': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'epson l5590': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'epson l6270': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'impresora epson l3250': 'S/ 699.00 (efectivo/transferencia) o S/ 730.00 (tarjeta)',
-    'impresora epson l4260': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'impresora epson l5590': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'impresora epson l6270': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'mochila': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'mochilas': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'suministros': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'tinta': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'tintas': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'cartucho': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'cartuchos': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'repuesto laptop': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'repuestos laptop': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'soporte laptop': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'soportes laptop': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'enfriador laptop': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'enfriadores laptop': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'cooler laptop': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    'coolers laptop': 'Precio no especificado en este momento, por favor contacta para más detalles.',
-    # Puedes añadir más productos aquí
+# Catálogo de productos con precios y descripciones
+productos = {
+    'laptops': {
+        'gaming': {
+            'laptop_gaming_1': {
+                'nombre': 'Laptop Gaming MSI Katana',
+                'precio': 'S/ 4,999.00',
+                'especificaciones': {
+                    'procesador': 'Intel Core i7 12th Gen',
+                    'ram': '16GB DDR4',
+                    'almacenamiento': 'SSD 512GB',
+                    'tarjeta_grafica': 'NVIDIA RTX 3060 6GB',
+                    'pantalla': '15.6" FHD 144Hz'
+                },
+                'descripcion': 'Ideal para gaming y trabajo profesional'
+            },
+            'laptop_gaming_2': {
+                'nombre': 'Laptop Gaming ASUS TUF',
+                'precio': 'S/ 3,999.00',
+                'especificaciones': {
+                    'procesador': 'AMD Ryzen 7',
+                    'ram': '16GB DDR4',
+                    'almacenamiento': 'SSD 512GB',
+                    'tarjeta_grafica': 'NVIDIA RTX 3050 4GB',
+                    'pantalla': '15.6" FHD 144Hz'
+                },
+                'descripcion': 'Excelente relación precio-rendimiento'
+            }
+        },
+        'profesional': {
+            'laptop_pro_1': {
+                'nombre': 'Laptop HP Envy',
+                'precio': 'S/ 3,499.00',
+                'especificaciones': {
+                    'procesador': 'Intel Core i7 12th Gen',
+                    'ram': '16GB DDR4',
+                    'almacenamiento': 'SSD 512GB',
+                    'tarjeta_grafica': 'Intel Iris Xe',
+                    'pantalla': '15.6" FHD'
+                },
+                'descripcion': 'Perfecta para trabajo profesional'
+            },
+            'laptop_pro_2': {
+                'nombre': 'Laptop Dell XPS',
+                'precio': 'S/ 4,499.00',
+                'especificaciones': {
+                    'procesador': 'Intel Core i7 12th Gen',
+                    'ram': '16GB DDR4',
+                    'almacenamiento': 'SSD 1TB',
+                    'tarjeta_grafica': 'NVIDIA RTX 3050 4GB',
+                    'pantalla': '15.6" 4K'
+                },
+                'descripcion': 'Alta gama para profesionales exigentes'
+            }
+        },
+        'estudio': {
+            'laptop_estudio_1': {
+                'nombre': 'Laptop Lenovo IdeaPad',
+                'precio': 'S/ 2,499.00',
+                'especificaciones': {
+                    'procesador': 'Intel Core i5 12th Gen',
+                    'ram': '8GB DDR4',
+                    'almacenamiento': 'SSD 256GB',
+                    'tarjeta_grafica': 'Intel Iris Xe',
+                    'pantalla': '15.6" FHD'
+                },
+                'descripcion': 'Ideal para estudiantes'
+            },
+            'laptop_estudio_2': {
+                'nombre': 'Laptop Acer Aspire',
+                'precio': 'S/ 1,999.00',
+                'especificaciones': {
+                    'procesador': 'AMD Ryzen 5',
+                    'ram': '8GB DDR4',
+                    'almacenamiento': 'SSD 256GB',
+                    'tarjeta_grafica': 'AMD Radeon Graphics',
+                    'pantalla': '15.6" FHD'
+                },
+                'descripcion': 'Económica y eficiente para estudios'
+            }
+        }
+    },
+    'desktops': {
+        'gaming': {
+            'pc_gaming_1': {
+                'nombre': 'PC Gaming Ultra',
+                'precio': 'S/ 5,999.00',
+                'especificaciones': {
+                    'procesador': 'Intel Core i9 12th Gen',
+                    'ram': '32GB DDR4',
+                    'almacenamiento': 'SSD 1TB + HDD 2TB',
+                    'tarjeta_grafica': 'NVIDIA RTX 3070 8GB',
+                    'refrigeracion': 'Líquida'
+                },
+                'descripcion': 'Alto rendimiento para gaming y streaming'
+            },
+            'pc_gaming_2': {
+                'nombre': 'PC Gaming Pro',
+                'precio': 'S/ 4,499.00',
+                'especificaciones': {
+                    'procesador': 'AMD Ryzen 7',
+                    'ram': '16GB DDR4',
+                    'almacenamiento': 'SSD 512GB + HDD 1TB',
+                    'tarjeta_grafica': 'NVIDIA RTX 3060 6GB',
+                    'refrigeracion': 'Aire'
+                },
+                'descripcion': 'Excelente para gaming y trabajo'
+            }
+        },
+        'profesional': {
+            'pc_pro_1': {
+                'nombre': 'PC Workstation',
+                'precio': 'S/ 3,999.00',
+                'especificaciones': {
+                    'procesador': 'Intel Core i7 12th Gen',
+                    'ram': '32GB DDR4',
+                    'almacenamiento': 'SSD 1TB',
+                    'tarjeta_grafica': 'NVIDIA RTX 3050 4GB',
+                    'refrigeracion': 'Aire'
+                },
+                'descripcion': 'Potente para trabajo profesional'
+            }
+        },
+        'estudio': {
+            'pc_estudio_1': {
+                'nombre': 'PC Estudio',
+                'precio': 'S/ 2,499.00',
+                'especificaciones': {
+                    'procesador': 'Intel Core i5 12th Gen',
+                    'ram': '16GB DDR4',
+                    'almacenamiento': 'SSD 512GB',
+                    'tarjeta_grafica': 'Intel UHD Graphics',
+                    'refrigeracion': 'Aire'
+                },
+                'descripcion': 'Ideal para estudiantes y trabajo básico'
+            }
+        }
+    },
+    'impresoras': {
+        'epson l3250': {
+            'precio': 'S/ 699.00 (efectivo) o S/ 730.00 (tarjeta)',
+            'descripcion': 'Impresora multifuncional con sistema de tanque de tinta'
+        },
+        'epson l4260': {
+            'precio': 'S/ 899.00 (efectivo) o S/ 930.00 (tarjeta)',
+            'descripcion': 'Impresora multifuncional con WiFi y panel táctil'
+        }
+    },
+    'tintas': {
+        'kit tintas epson': {
+            'precio': 'S/ 120.00',
+            'descripcion': 'Kit completo (negro, cian, magenta, amarillo)'
+        },
+        'tinta negra epson': {
+            'precio': 'S/ 35.00',
+            'descripcion': 'Botella de tinta negra original'
+        }
+    },
+    'mochilas': {
+        'mochila 15.6': {
+            'precio': 'S/ 89.90',
+            'descripcion': 'Mochila para laptop hasta 15.6"'
+        },
+        'mochila 17.3': {
+            'precio': 'S/ 99.90',
+            'descripcion': 'Mochila para laptop hasta 17.3"'
+        }
+    }
 }
 
-# Servicios ofrecidos
-services = [
-    'venta de equipos tecnológicos',
-    'servicios de soporte técnico para empresas',
-    'servicios de soporte técnico para personas naturales',
-    'reparación de laptops',
-    'mantenimiento de equipos tecnológicos'
+# Catálogo de servicios con precios
+servicios = {
+    'reparacion': {
+        'diagnostico': {
+            'precio': 'S/ 30.00',
+            'descripcion': 'Diagnóstico completo del equipo'
+        },
+        'limpieza': {
+            'precio': 'S/ 50.00',
+            'descripcion': 'Limpieza interna y cambio de pasta térmica'
+        },
+        'pantalla': {
+            'precio': 'Desde S/ 200.00',
+            'descripcion': 'Reemplazo de pantalla (precio varía según modelo)'
+        }
+    },
+    'mantenimiento': {
+        'preventivo': {
+            'precio': 'S/ 80.00',
+            'descripcion': 'Mantenimiento preventivo completo'
+        },
+        'correctivo': {
+            'precio': 'Desde S/ 50.00',
+            'descripcion': 'Mantenimiento según el problema específico'
+        }
+    }
+}
+
+# Servicios ofrecidos (lista más descriptiva)
+services_list = [
+    'Venta de equipos tecnológicos nuevos y con garantía (laptops, impresoras, accesorios y más).',
+    'Servicios de soporte técnico especializado para empresas.',
+    'Servicios de soporte técnico para usuarios domésticos (personas naturales).',
+    'Reparación profesional de laptops y computadoras.',
+    'Mantenimiento preventivo y correctivo de equipos tecnológicos.',
+    'Asesoría personalizada para elegir el equipo o solución adecuada.'
     # Puedes añadir más servicios aquí
 ]
 
@@ -73,112 +244,201 @@ def send_message():
     user_message = data.get('message', '')
     user_message_lower = user_message.lower()
 
-    response = ""
+    # Saludos
+    if any(greeting in user_message_lower for greeting in ['hola', 'buenas', 'buenos dias', 'buenas tardes']):
+        return jsonify({
+            'response': "¡Hola! Soy el asistente virtual de ULTRATEC. ¿En qué puedo ayudarte hoy? Puedo informarte sobre:\n\n" +
+                      "📱 Productos y precios\n" +
+                      "🔧 Servicios de reparación\n" +
+                      "📞 Información de contacto\n" +
+                      "📍 Ubicación\n\n" +
+                      "¿Qué te gustaría saber?"
+        })
 
-    # Intentar encontrar una coincidencia difusa con las palabras clave generales
-    general_keywords = {
-        'hola': ['hola', 'saludos', 'buenos dias', 'buenas tardes', 'buenas noches'],
-        'ayuda': ['ayuda', 'socorro', 'necesito saber', 'consulta', 'pregunta'],
-        'gracias': ['gracias', 'muchas gracias', 'agradecido'],
-        'adios': ['adios', 'chao', 'hasta luego', 'bye', 'nos vemos'],
-        'servicios_productos': ['servicios', 'productos', 'ofrecen', 'venden', 'equipos', 'tecnologia', 'que tienen', 'catalogo', 'lista', 'impresoras', 'mochilas', 'suministros', 'tintas', 'cartuchos', 'repuestos laptop', 'soportes laptop', 'enfriadores laptop', 'coolers laptop', 'reparacion', 'mantenimiento'],
-        'ubicacion_envios': ['ubicacion', 'donde estan', 'direccion', 'tienda', 'donde ubicar', 'sede', 'local', 'envios', 'entrega', 'delivery', 'mandan a piura', 'enviar'],
-        'contacto': ['contacto', 'llamar', 'telefono', 'correo', 'facebook', 'whatsapp', 'redes sociales', 'comunicar'],
-        'horario': ['horario', 'horas', 'abierto', 'atienden', 'a que hora'],
-        'precio': ['precio', 'costo', 'valor', 'cuanto cuesta', 'presupuesto']
-    }
+    # Manejo de selección de equipos (Laptops y PCs)
+    elif 'laptop' in user_message_lower or 'computadora' in user_message_lower or 'pc' in user_message_lower:
+        if 'gaming' in user_message_lower or 'juegos' in user_message_lower:
+            response = "¡Excelente elección! Para gaming te recomiendo equipos con buen rendimiento. ¿Tienes un presupuesto en mente?\n\n"
+            response += "Tenemos estas opciones:\n\n"
+            response += "**Laptops Gaming:**\n"
+            for laptop in productos['laptops']['gaming'].values():
+                response += f"📱 {laptop['nombre']}\n"
+                response += f"💰 {laptop['precio']}\n"
+                response += "Especificaciones:\n"
+                for key, value in laptop['especificaciones'].items():
+                    response += f"- {key.replace('_', ' ').title()}: {value}\n"
+                response += f"📝 {laptop['descripcion']}\n\n"
+            
+            response += "**PCs Gaming:**\n"
+            for pc in productos['desktops']['gaming'].values():
+                response += f"🖥️ {pc['nombre']}\n"
+                response += f"💰 {pc['precio']}\n"
+                response += "Especificaciones:\n"
+                for key, value in pc['especificaciones'].items():
+                    response += f"- {key.replace('_', ' ').title()}: {value}\n"
+                response += f"📝 {pc['descripcion']}\n\n"
+            
+            response += "¿Cuál de estas opciones te interesa más? ¿O prefieres ver otras alternativas?"
+            return jsonify({'response': response})
 
-    # Buscar coincidencia con palabras clave generales
-    matched_general_keyword = None
-    for key, choices in general_keywords.items():
-        if find_best_match(user_message_lower, choices):
-             matched_general_keyword = key
-             break # Encontramos una coincidencia general, procesamos eso
+        elif 'profesional' in user_message_lower or 'trabajo' in user_message_lower:
+            response = "¡Perfecto! Para trabajo profesional necesitarás un equipo potente. ¿Cuál es tu presupuesto?\n\n"
+            response += "Te muestro nuestras opciones:\n\n"
+            response += "**Laptops Profesionales:**\n"
+            for laptop in productos['laptops']['profesional'].values():
+                response += f"📱 {laptop['nombre']}\n"
+                response += f"💰 {laptop['precio']}\n"
+                response += "Especificaciones:\n"
+                for key, value in laptop['especificaciones'].items():
+                    response += f"- {key.replace('_', ' ').title()}: {value}\n"
+                response += f"📝 {laptop['descripcion']}\n\n"
+            
+            response += "**PCs Profesionales:**\n"
+            for pc in productos['desktops']['profesional'].values():
+                response += f"🖥️ {pc['nombre']}\n"
+                response += f"💰 {pc['precio']}\n"
+                response += "Especificaciones:\n"
+                for key, value in pc['especificaciones'].items():
+                    response += f"- {key.replace('_', ' ').title()}: {value}\n"
+                response += f"📝 {pc['descripcion']}\n\n"
+            
+            response += "¿Cuál de estas opciones se ajusta mejor a tus necesidades?"
+            return jsonify({'response': response})
 
-    # Procesar la respuesta basada en la palabra clave general encontrada
-    if matched_general_keyword == 'hola':
-        response = "¡Hola! Soy tu asistente virtual de ULTRATEC. ¿En qué puedo ayudarte hoy con nuestros productos o servicios?"
-    elif matched_general_keyword == 'ayuda':
-        response = "Claro, estoy aquí para ayudarte con información sobre ULTRATEC y nuestros equipos de cómputo y tecnología. ¿Sobre qué tema necesitas información?"
-    elif matched_general_keyword == 'gracias':
-        response = "¡De nada! Si tienes más preguntas sobre ULTRATEC o nuestros productos, no dudes en consultarme."
-    elif matched_general_keyword == 'adios':
-        response = "¡Hasta luego! Que tengas un excelente día. Estoy a tu disposición si necesitas algo más de ULTRATEC."
-    
-    elif matched_general_keyword == 'servicios_productos':
-        service_list = "\n".join([f"- {s.capitalize()}" for s in services])
-        # Excluir nombres de productos específicos que podrían ser subcadenas de otros
-        product_keys_to_list = [p.title() for p in products.keys() if 'impresora' not in p] # Ajusta según cómo quieras listar
-        product_list_str = ", ".join(sorted(list(set(product_keys_to_list))))
+        elif 'estudio' in user_message_lower or 'estudiante' in user_message_lower:
+            response = "¡Entendido! Para estudios necesitarás un equipo confiable pero económico. ¿Cuál es tu presupuesto?\n\n"
+            response += "Te muestro nuestras opciones:\n\n"
+            response += "**Laptops para Estudio:**\n"
+            for laptop in productos['laptops']['estudio'].values():
+                response += f"📱 {laptop['nombre']}\n"
+                response += f"💰 {laptop['precio']}\n"
+                response += "Especificaciones:\n"
+                for key, value in laptop['especificaciones'].items():
+                    response += f"- {key.replace('_', ' ').title()}: {value}\n"
+                response += f"📝 {laptop['descripcion']}\n\n"
+            
+            response += "**PCs para Estudio:**\n"
+            for pc in productos['desktops']['estudio'].values():
+                response += f"🖥️ {pc['nombre']}\n"
+                response += f"💰 {pc['precio']}\n"
+                for key, value in pc['especificaciones'].items():
+                    response += f"- {key.replace('_', ' ').title()}: {value}\n"
+                response += f"📝 {pc['descripcion']}\n\n"
+            
+            response += "¿Cuál de estas opciones te parece más adecuada?"
+            return jsonify({'response': response})
 
-        response = (
-            "En ULTRATEC nos especializamos en la venta de equipos tecnológicos y ofrecemos:\n\n" +
-            "**Servicios:**\n" +
-            f"{service_list}\n\n" +
-            "**Productos:**\n" +
-            f"Tenemos productos como: {product_list_str}. Puedes preguntar por precios específicos (ej. 'Precio Epson L3250').\n\n" +
-            "¿Hay algo más en lo que pueda ayudarte?"
-        )
-    elif matched_general_keyword == 'ubicacion_envios':
-        response = "Nuestra dirección principal es Jr. Emilio Fernández N° 171, Urb. Santa Beatriz, Lima. También tenemos operaciones en Piura y realizamos envíos a cualquier distrito de la provincia de Piura."
-    elif matched_general_keyword == 'contacto':
-        response = "Puedes contactar a ULTRATEC REPRESENTACIONES S.A.C. llamando al (01) 330-1111 o visitando nuestra página de Facebook: facebook.com/ultratecperu."
-    elif matched_general_keyword == 'horario':
-        response = "Nuestro horario de atención es de lunes a viernes de 9:00 a 18:00, y los sábados de 10:00 a 14:00."
-    
-    # Lógica para precios usando fuzzy matching para productos
-    elif matched_general_keyword == 'precio':
-        found_product_key = None
-        best_product_match = find_best_match(user_message_lower, list(products.keys()))
-        
-        if best_product_match:
-             found_product_key = best_product_match
-
-        if found_product_key:
-            price = products[found_product_key]
-            response = f"El precio de {found_product_key.title()} es: {price}"
         else:
-            # Si preguntan por precio pero no se encuentra un producto con buena similitud
-            priced_products_info = [p.title() for p, price_info in products.items() if 'Precio no especificado' not in price_info and not p.startswith('impresora')] # Productos con precio directo
-            priceless_products_info = [p.title() for p, price_info in products.items() if 'Precio no especificado' in price_info and not p.startswith('impresora')] # Productos sin precio directo
+            response = "¡Claro! Para ayudarte mejor, ¿podrías decirme para qué vas a usar el equipo?\n\n"
+            response += "Tenemos opciones para:\n"
+            response += "🎮 Gaming/Juegos\n"
+            response += "💼 Trabajo Profesional\n"
+            response += "📚 Estudio\n\n"
+            response += "¿Cuál de estas categorías se ajusta mejor a tus necesidades?"
+            return jsonify({'response': response})
 
-            response_lines = ["Puedo darte información de precios para los siguientes productos:"]
-            
-            if priced_products_info:
-                response_lines.append("\n**Productos con precio disponible:**")
-                response_lines.extend([f"- {p}" for p in priced_products_info])
-                
-            if priceless_products_info:
-                 response_lines.append("\n**Otros productos (por favor, contacta para precio):**")
-                 response_lines.extend([f"- {p}" for p in priceless_products_info])
-                 
-            if not priced_products_info and not priceless_products_info:
-                 response_lines = ["En este momento no tengo información de precios detallada para mostrar. Por favor, contáctanos directamente para consultar precios de productos específicos."]
+    # Consulta de precios de otros productos (Impresoras, Tintas, Mochilas)
+    elif 'precio' in user_message_lower or 'costo' in user_message_lower:
+        if 'tinta' in user_message_lower:
+            response = "¡Claro! Te muestro nuestro catálogo de tintas:\n\n"
+            for producto, detalles in productos['tintas'].items():
+                response += f"**{producto.title()}**\n"
+                response += f"Precio: {detalles['precio']}\n"
+                response += f"Descripción: {detalles['descripcion']}\n\n"
+            response += "¿Te gustaría saber más detalles sobre alguna tinta en particular?"
+            return jsonify({'response': response})
 
-            response_lines.append("\n¿De cuál te gustaría saber el precio, o necesitas consultar sobre otro producto?")
-            
-            response = "\n".join(response_lines)
+        elif 'impresora' in user_message_lower:
+            response = "¡Por supuesto! Aquí están nuestras impresoras disponibles:\n\n"
+            for producto, detalles in productos['impresoras'].items():
+                response += f"**{producto.title()}**\n"
+                response += f"Precio: {detalles['precio']}\n"
+                response += f"Descripción: {detalles['descripcion']}\n\n"
+            response += "¿Necesitas más información sobre algún modelo?"
+            return jsonify({'response': response})
 
-    # --- Respuesta por defecto si no se encuentra una coincidencia general o de precio ---
-    if not response:
-         # Si la API de Wolfram Alpha estuviera activada y no encontró respuesta, usaríamos eso aquí.
-         # ... (lógica de Wolfram Alpha si se reactiva) ...
-         
-         # Respuesta si no se encuentra ninguna coincidencia y la API no está activa/no responde
-         response = (
-            "Lo siento, no entendí tu pregunta. Soy un chatbot diseñado para ayudarte con información sobre ULTRATEC REPRESENTACIONES S.A.C.\n\n" +
-            "Puedo responder sobre:\n"
-            "- **Productos y Servicios:** (Impresoras, Mochilas, Suministros, Tintas, Cartuchos, Repuestos Laptop, Soportes Laptop, Enfriadores/Coolers, Reparación y Mantenimiento).\n"
-            "- **Precios** (puedes preguntar por productos específicos).\n"
-            "- **Ubicación y Envíos:** (Dirección en Lima, envíos a Piura).\n"
-            "- **Contacto:** (Teléfono fijo, Facebook).\n"
-            "- **Horario de Atención.\n\n"
-            "¿Sobre cuál de estos temas te gustaría conversar?"
-        )
+        elif 'mochila' in user_message_lower:
+            response = "¡Con gusto! Aquí está nuestro catálogo de mochilas:\n\n"
+            for producto, detalles in productos['mochilas'].items():
+                response += f"**{producto.title()}**\n"
+                response += f"Precio: {detalles['precio']}\n"
+                response += f"Descripción: {detalles['descripcion']}\n\n"
+            response += "¿Te gustaría conocer más detalles sobre alguna mochila?"
+            return jsonify({'response': response})
+        
+        # Default price query response if no specific product category is matched
+        else:
+             response = "Claro, ¿sobre qué producto o categoría de productos te gustaría saber precios? Por ejemplo: impresoras, tintas, mochilas."
+             return jsonify({'response': response})
 
-    # --- Fin Integración con Wolfram|Alpha API ---
 
-    return jsonify({'response': response})
+    # Consulta general de productos (sin especificar precios)
+    elif 'productos' in user_message_lower or 'catalogo' in user_message_lower:
+        response = "¡Claro! Tenemos una variedad de productos tecnológicos, incluyendo:\n\n"
+        response += "- 📱 Laptops y PCs (para gaming, trabajo profesional y estudio)\n"
+        response += "- 🖨️ Impresoras\n"
+        response += "- 🧴 Tintas y suministros\n"
+        response += "- 🎒 Mochilas y accesorios\n\n"
+        response += "¿Te interesa algún tipo de producto en particular o quieres ver los precios?"
+        return jsonify({'response': response})
+
+
+    # Consulta de servicios
+    elif 'reparacion' in user_message_lower or 'reparar' in user_message_lower:
+        response = "¡Claro! Te explico nuestros servicios de reparación:\n\n"
+        for servicio, detalles in servicios['reparacion'].items():
+            response += f"**{servicio.title()}**\n"
+            response += f"Precio: {detalles['precio']}\n"
+            response += f"Descripción: {detalles['descripcion']}\n\n"
+        response += "¿Qué tipo de reparación necesitas? Puedo darte más detalles."
+        return jsonify({'response': response})
+
+    elif 'mantenimiento' in user_message_lower:
+        response = "¡Por supuesto! Aquí están nuestros servicios de mantenimiento:\n\n"
+        for servicio, detalles in servicios['mantenimiento'].items():
+            response += f"**{servicio.title()}**\n"
+            response += f"Precio: {detalles['precio']}\n"
+            response += f"Descripción: {detalles['descripcion']}\n\n"
+        response += "¿Qué tipo de mantenimiento te interesa?"
+        return jsonify({'response': response})
+    
+    # Consulta general de servicios
+    elif 'servicios' in user_message_lower:
+        response = "¡Claro! Ofrecemos una variedad de servicios técnicos, incluyendo:\n\n"
+        for service_desc in services_list:
+            response += f"- {service_desc}\n"
+        response += "\n¿Te interesa algún servicio en particular, como reparación o mantenimiento?"
+        return jsonify({'response': response})
+
+
+    # Información de contacto
+    elif 'contacto' in user_message_lower or 'telefono' in user_message_lower or 'email' in user_message_lower or 'whatsapp' in user_message_lower:
+        response = "¡Por supuesto! Puedes contactarnos de las siguientes formas:\n\n"
+        response += "📞 Teléfono fijo: (01) 330-1111\n"
+        response += "📱 WhatsApp: 969 933 771\n"
+        response += "📧 Email: ventas@ultratec.com.pe\n"
+        response += "🌐 Facebook: facebook.com/ultratecperu\n\n"
+        response += "Nuestro horario de atención es de lunes a viernes de 9:00 a.m. a 6:00 p.m., y los sábados de 10:00 a.m. a 2:00 p.m."
+        return jsonify({'response': response})
+
+    # Ubicación
+    elif 'ubicacion' in user_message_lower or 'direccion' in user_message_lower or 'donde estan' in user_message_lower:
+        response = "¡Claro! Nuestra tienda principal está ubicada en:\n\n"
+        response += "📍 Jr. Emilio Fernández N° 171, Urb. Santa Beatriz, Lima\n\n"
+        response += "También realizamos envíos a cualquier distrito de la provincia de Piura."
+        return jsonify({'response': response})
+
+    # Respuesta por defecto (Fallback mejorado)
+    else:
+        response = """Lo siento, no estoy seguro de haberte entendido. Puedo ayudarte con:
+
+📱 Información sobre **Productos** y **precios** (laptops, PCs, impresoras, tintas, mochilas)
+🔧 **Servicios** de reparación y mantenimiento
+📞 Información de **contacto**
+📍 **Ubicación**
+
+¿Sobre qué te gustaría saber?"""
+        return jsonify({'response': response})
 
 if __name__ == '__main__':
     # Para probar localmente usando la variable de entorno,
