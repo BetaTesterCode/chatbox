@@ -4,6 +4,19 @@ import os
 
 app = Flask(__name__)
 
+# Diccionario de productos y precios (ejemplos basados en la imagen)
+products = {
+    'epson l3250': 'S/ 699.00 (efectivo/transferencia) o S/ 730.00 (tarjeta)',
+    'epson l4260': 'Precio no especificado en este momento, por favor contacta para más detalles.', # Precio no visible en la imagen
+    'epson l5590': 'Precio no especificado en este momento, por favor contacta para más detalles.', # Precio no visible en la imagen
+    'epson l6270': 'Precio no especificado en este momento, por favor contacta para más detalles.', # Precio no visible en la imagen
+    'impresora epson l3250': 'S/ 699.00 (efectivo/transferencia) o S/ 730.00 (tarjeta)',
+    'impresora epson l4260': 'Precio no especificado en este momento, por favor contacta para más detalles.',
+    'impresora epson l5590': 'Precio no especificado en este momento, por favor contacta para más detalles.',
+    'impresora epson l6270': 'Precio no especificado en este momento, por favor contacta para más detalles.',
+    # Puedes añadir más productos aquí
+}
+
 # Configura tu clave API de Wolfram|Alpha.
 # Opción Recomendada: Usar una variable de entorno en PythonAnywhere
 # Lee la clave de la variable de entorno llamada WOLFRAM_ALPHA_API_KEY
@@ -19,63 +32,69 @@ def home():
 @app.route('/send_message', methods=['POST'])
 def send_message():
     data = request.get_json()
-    user_message = data.get('message', '').lower()
-    
-    response = ""
-    
-    # Procesar el mensaje y generar una respuesta
+    user_message = data.get('message', '')
     user_message_lower = user_message.lower()
 
+    response = ""
+
     # Respuestas básicas y contextualizadas
-    if 'hola' in user_message_lower or 'saludos' in user_message_lower:
+    if 'hola' in user_message_lower or 'saludos' in user_message_lower or 'buenos dias' in user_message_lower or 'buenas tardes' in user_message_lower or 'buenas noches' in user_message_lower:
         response = "¡Hola! Soy tu asistente virtual de ULTRATEC. ¿En qué puedo ayudarte hoy con nuestros productos o servicios?"
-    elif 'ayuda' in user_message_lower or 'socorro' in user_message_lower or 'necesito saber' in user_message_lower:
+    elif 'ayuda' in user_message_lower or 'socorro' in user_message_lower or 'necesito saber' in user_message_lower or 'consulta' in user_message_lower:
         response = "Claro, estoy aquí para ayudarte con información sobre ULTRATEC y nuestros equipos de cómputo y tecnología. ¿Sobre qué tema necesitas información?"
     elif 'gracias' in user_message_lower:
         response = "¡De nada! Si tienes más preguntas sobre ULTRATEC o nuestros productos, no dudes en consultarme."
     elif 'adios' in user_message_lower or 'chao' in user_message_lower or 'hasta luego' in user_message_lower or 'bye' in user_message_lower:
         response = "¡Hasta luego! Que tengas un excelente día. Estoy a tu disposición si necesitas algo más de ULTRATEC."
     
-    # Respuestas sobre ULTRATEC (basadas en la información proporcionada)
-    elif 'empresa' in user_message_lower or 'sobre ultratec' in user_message_lower or 'quienes son' in user_message_lower:
-         response = "ULTRATEC REPRESENTACIONES S.A.C. es una Sociedad Anónima Cerrada activa y habida desde el 3 de noviembre de 2009. Nos especializamos en la venta al por mayor no especializada de equipos tecnológicos y ofrecemos servicios de soporte técnico."
-    elif 'servicios' in user_message_lower or 'productos' in user_message_lower or 'ofrecen' in user_message_lower or 'venden' in user_message_lower or 'equipos' in user_message_lower or 'tecnologia' in user_message_lower:
-        response = "En ULTRATEC nos especializamos en la venta de equipos tecnológicos y ofrecemos servicios de soporte técnico tanto para empresas como para personas naturales."
-    elif 'ubicacion' in user_message_lower or 'donde estan' in user_message_lower or 'direccion' in user_message_lower or 'tienda' in user_message_lower:
-        response = "Nuestra dirección legal principal es Jr. Emilio Fernández N° 171, Urb. Santa Beatriz, Lima. También tenemos operaciones en Piura y realizamos envíos a cualquier distrito de la provincia de Piura."
-    elif 'envios' in user_message_lower or 'entrega' in user_message_lower or 'delivery' in user_message_lower:
+    # Respuestas sobre ULTRATEC (información relevante para atención al cliente)
+    elif 'servicios' in user_message_lower or 'productos' in user_message_lower or 'ofrecen' in user_message_lower or 'venden' in user_message_lower or 'equipos' in user_message_lower or 'tecnologia' in user_message_lower or 'que tienen' in user_message_lower:
+        product_list = "\n".join([f"- {p.title()}" for p in products.keys() if not p.startswith('impresora')]) # Listar productos principales sin el prefijo 'impresora'
+        response = (
+            "En ULTRATEC nos especializamos en la venta de equipos tecnológicos y ofrecemos servicios de soporte técnico tanto para empresas como para personas naturales.\n\n" +
+            "Algunos de nuestros productos (pregúntame por su precio):\n" +
+            f"{product_list}\n\n" +
+            "¿Hay algo más en lo que pueda ayudarte?"
+        )
+    elif 'ubicacion' in user_message_lower or 'donde estan' in user_message_lower or 'direccion' in user_message_lower or 'tienda' in user_message_lower or 'donde ubicar' in user_message_lower:
+        response = "Nuestra dirección principal es Jr. Emilio Fernández N° 171, Urb. Santa Beatriz, Lima. También tenemos operaciones en Piura y realizamos envíos a cualquier distrito de la provincia de Piura."
+    elif 'envios' in user_message_lower or 'entrega' in user_message_lower or 'delivery' in user_message_lower or 'mandan a piura' in user_message_lower:
          response = "Sí, realizamos envíos a cualquier distrito de la provincia de Piura."
     elif 'contacto' in user_message_lower or 'llamar' in user_message_lower or 'telefono' in user_message_lower or 'correo' in user_message_lower or 'facebook' in user_message_lower or 'whatsapp' in user_message_lower or 'redes sociales' in user_message_lower:
         response = "Puedes contactar a ULTRATEC REPRESENTACIONES S.A.C. llamando al (01) 330-1111 o visitando nuestra página de Facebook: facebook.com/ultratecperu."
-    elif 'ruc' in user_message_lower or 'numero de ruc' in user_message_lower or 'identificacion fiscal' in user_message_lower:
-        response = "El RUC de ULTRATEC REPRESENTACIONES S.A.C. es 20523303351."
-    elif 'estado' in user_message_lower or 'situacion actual' in user_message_lower:
-        response = "El estado actual de ULTRATEC REPRESENTACIONES S.A.C. es Activo y Habido."
-    elif 'fecha de inicio' in user_message_lower or 'cuando empezaron' in user_message_lower:
-        response = "ULTRATEC REPRESENTACIONES S.A.C. inició actividades el 3 de noviembre de 2009."
-    elif 'actividad economica' in user_message_lower or 'rubro' in user_message_lower or 'a que se dedican' in user_message_lower:
-        response = "La actividad económica principal de ULTRATEC REPRESENTACIONES S.A.C. es la venta al por mayor no especializada."
-    elif 'sunat' in user_message_lower or 'clasificacion sunat' in user_message_lower or 'contribuyente' in user_message_lower:
-        response = "Según la SUNAT, ULTRATEC REPRESENTACIONES S.A.C. es Buen Contribuyente desde el 1 de febrero de 2022."
-    elif 'registro nacional de proveedores' in user_message_lower or 'rnp' in user_message_lower or 'proveedor del estado' in user_message_lower or 'contratar con estado' in user_message_lower:
-        response = "Sí, ULTRATEC REPRESENTACIONES S.A.C. está empadronada en el Registro Nacional de Proveedores (RNP) como proveedor de bienes y servicios, lo que nos permite contratar con el Estado."
-    elif 'horario' in user_message_lower or 'horas' in user_message_lower or 'abierto' in user_message_lower:
+    elif 'horario' in user_message_lower or 'horas' in user_message_lower or 'abierto' in user_message_lower or 'atienden' in user_message_lower:
         response = "Nuestro horario de atención es de lunes a viernes de 9:00 a 18:00, y los sábados de 10:00 a 14:00."
-    elif 'precio' in user_message_lower or 'costo' in user_message_lower or 'valor' in user_message_lower:
-        response = "¿Sobre qué producto o servicio específico de ULTRATEC te gustaría saber el precio? Por favor, dime el nombre del producto o el servicio para darte información."
+    
+    # Lógica para precios
+    elif 'precio' in user_message_lower or 'costo' in user_message_lower or 'valor' in user_message_lower or 'cuanto cuesta' in user_message_lower:
+        found_product = None
+        for product_key in products:
+            if product_key in user_message_lower:
+                found_product = product_key
+                break
+                
+        if found_product:
+            price = products[found_product]
+            response = f"El precio de {found_product.title()} es: {price}"
+        else:
+            # Si preguntan por precio pero no especifican producto
+            product_list_prices = "\n".join([f"- {p.title()}" for p in products.keys() if not p.startswith('impresora')])
+            response = (
+                "Puedo darte información de precios para los siguientes productos:\n" +
+                f"{product_list_prices}\n\n" +
+                "¿De cuál te gustaría saber el precio?"
+            )
 
     # --- Respuesta por defecto si no se encuentra una coincidencia ---
     # Si no encontramos una respuesta predefinida, indicamos los temas que sí manejamos.
     if not response:
         response = (
-            "Lo siento, no entendí tu pregunta. Soy un chatbot diseñado para ayudarte con información específica sobre ULTRATEC REPRESENTACIONES S.A.C.\n\n" +
+            "Lo siento, no entendí tu pregunta. Soy un chatbot diseñado para ayudarte con información sobre ULTRATEC REPRESENTACIONES S.A.C. enfocada en productos y servicios.\n\n" +
             "Puedo responder sobre:\n"
-            "- **Información General:** Razón Social, RUC, Tipo de Empresa, Estado, Fecha de Inicio, Dirección Legal (Lima), Actividad Económica, Clasificación SUNAT, RNP.\n"
-            "- **Productos y Servicios:** Qué ofrecemos (venta de equipos y soporte técnico).\n"
+            "- **Productos y Servicios:** Qué ofrecemos y qué productos tenemos (puedes preguntar por precios).\n"
             "- **Ubicación y Envíos:** Dirección en Lima y envíos a Piura.\n"
             "- **Contacto:** Teléfono fijo y Facebook.\n"
-            "- **Horario de Atención.\n"
-            "- **Precios** (solicitando el producto/servicio específico).\n\n"
+            "- **Horario de Atención.\n\n"
             "¿Sobre cuál de estos temas te gustaría conversar?"
         )
 
