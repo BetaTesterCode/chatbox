@@ -94,16 +94,22 @@ h1 {
     flex-shrink: 0; /* Prevent message from shrinking */
 }
 
-.user-message .message {
+.user-message {
     background-color: #dcf8c6; /* Light green bubble */
     color: #1c1c1c;
     border-bottom-right-radius: 2px;
+    margin-left: auto; /* Push user message to the right */
 }
 
-.bot-message .message {
+.bot-message {
     background-color: #ffffff; /* White bubble */
     color: #1c1c1c;
     border-bottom-left-radius: 2px;
+    margin-right: auto; /* Push bot message to the left */
+}
+
+.user-message, .bot-message {
+    margin-bottom: 10px; /* Add space between messages */
 }
 
 .input-area {
