@@ -476,18 +476,18 @@ def send_message():
     # Información de contacto
     elif 'contacto' in user_message_lower or 'telefono' in user_message_lower or 'email' in user_message_lower or 'whatsapp' in user_message_lower:
         response = "¡Por supuesto! Puedes contactarnos de las siguientes formas:\n\n"
-        response += "📞 Teléfono fijo: (01) 330-1111\n"
-        response += "📱 WhatsApp: 969 933 771\n"
-        response += "📧 Email: ventas@ultratec.com.pe\n"
-        response += "🌐 Facebook: facebook.com/ultratecperu\n\n"
-        response += "Nuestro horario de atención es de lunes a viernes de 9:00 a.m. a 6:00 p.m., y los sábados de 10:00 a.m. a 2:00 p.m."
+        response += "📞 Teléfono: 969 922 771\n"
+        response += "📧 Email: ventas@ultratec.pe\n"
+        response += "🌐 Web: ultratec.pe\n\n"
+        response += "Nuestro horario de atención es de lunes a viernes de 8:00 AM a 6:00 PM y sábados de 9:00 AM a 1:00 PM."
         return jsonify({'response': response})
 
     # Ubicación
     elif 'ubicacion' in user_message_lower or 'direccion' in user_message_lower or 'donde estan' in user_message_lower:
-        response = "¡Claro! Nuestra tienda principal está ubicada en:\n\n"
-        response += "📍 Jr. Emilio Fernández N° 171, Urb. Santa Beatriz, Lima\n\n"
-        response += "También realizamos envíos a cualquier distrito de la provincia de Piura."
+        response = "¡Claro! Nuestra tienda está ubicada en:\n\n"
+        response += "📍 Jirón Ica 500-598 centro de Piura\n"
+        response += "Ref. esquina Arequipa con Ica, Piura, Perú\n\n"
+        response += "Estamos en el centro de Piura."
         return jsonify({'response': response})
 
     # Respuesta por defecto (Fallback mejorado)
