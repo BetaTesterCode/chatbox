@@ -378,29 +378,43 @@ def send_message():
     # Consulta de precios de otros productos (Impresoras, Tintas, Mochilas)
     elif 'precio' in user_message_lower or 'costo' in user_message_lower:
         if 'tinta' in user_message_lower:
-            response = "¡Claro! Te muestro nuestro catálogo de tintas:\n\n"
-            for producto, detalles in productos['tintas'].items():
-                response += f"**{producto.title()}**\n"
-                response += f"Precio: {detalles['precio']}\n"
-                response += f"Descripción: {detalles['descripcion']}\n\n"
-            response += "¿Te gustaría saber más detalles sobre alguna tinta en particular?"
+            response = "¡Claro! ¿Sobre qué tipo de tinta te gustaría saber precios o tienes un presupuesto en mente?"
+            # Podemos listar opciones si el usuario especifica o pregunta por general
+            if 'epson' in user_message_lower or 'kit' in user_message_lower:
+                 response += "\n\nNuestro catálogo de tintas incluye:\n\n"
+                 for producto, detalles in productos['tintas'].items():
+                     response += f"**{producto.title()}**\n"
+                     response += f"Precio: {detalles['precio']}\n"
+                     response += f"Descripción: {detalles['descripcion']}\n\n"
+                 response += "¿Hay alguna que te interese en particular?"
+
             return jsonify({'response': response})
 
         elif 'impresora' in user_message_lower:
-            response = "¡Por supuesto! Aquí están nuestras impresoras disponibles:\n\n"
+            response = "¡Por supuesto! ¿Estás buscando una impresora para hogar, oficina, o alguna característica específica? ¿Tienes un presupuesto?\n\n"
+            # Podemos listar opciones si el usuario especifica o pregunta por general
+            # if '(algún tipo específico)' in user_message_lower:
+            # (Lógica para filtrar por tipo/presupuesto - más compleja sin estado)
+            # else:
+            response += "Nuestro catálogo de impresoras incluye modelos como:\n\n"
             for producto, detalles in productos['impresoras'].items():
-                response += f"**{producto.title()}**\n"
-                response += f"Precio: {detalles['precio']}\n"
-                response += f"Descripción: {detalles['descripcion']}\n\n"
+                 response += f"**{producto.title()}**\n"
+                 response += f"Precio: {detalles['precio']}\n"
+                 response += f"Descripción: {detalles['descripcion']}\n\n"
             response += "¿Necesitas más información sobre algún modelo?"
             return jsonify({'response': response})
 
         elif 'mochila' in user_message_lower:
-            response = "¡Con gusto! Aquí está nuestro catálogo de mochilas:\n\n"
+            response = "¡Con gusto! ¿Qué tamaño de laptop tienes o cuál es tu presupuesto para una mochila?\n\n"
+            # Podemos listar opciones si el usuario especifica o pregunta por general
+            # if '(tamaño o presupuesto)' in user_message_lower:
+            # (Lógica para filtrar por tamaño/presupuesto - más compleja sin estado)
+            # else:
+            response += "Aquí está nuestro catálogo de mochilas:\n\n"
             for producto, detalles in productos['mochilas'].items():
-                response += f"**{producto.title()}**\n"
-                response += f"Precio: {detalles['precio']}\n"
-                response += f"Descripción: {detalles['descripcion']}\n\n"
+                 response += f"**{producto.title()}**\n"
+                 response += f"Precio: {detalles['precio']}\n"
+                 response += f"Descripción: {detalles['descripcion']}\n\n"
             response += "¿Te gustaría conocer más detalles sobre alguna mochila?"
             return jsonify({'response': response})
         
@@ -413,17 +427,22 @@ def send_message():
     # Consulta general de productos (sin especificar precios)
     elif 'productos' in user_message_lower or 'catalogo' in user_message_lower:
         response = "¡Claro! Tenemos una variedad de productos tecnológicos, incluyendo:\n\n"
-        response += "- 📱 Laptops y PCs (para gaming, trabajo profesional y estudio)\n"
-        response += "- 🖨️ Impresoras\n"
-        response += "- 🧴 Tintas y suministros\n"
-        response += "- 🎒 Mochilas y accesorios\n\n"
+        response += "- 📱 **Laptops y PCs** (para gaming, trabajo profesional y estudio)\n"
+        response += "- 🖨️ **Impresoras**\n"
+        response += "- 🧴 **Tintas** y suministros\n"
+        response += "- 🎒 **Mochilas** y accesorios\n\n"
         response += "¿Te interesa algún tipo de producto en particular o quieres ver los precios?"
         return jsonify({'response': response})
 
 
     # Consulta de servicios
     elif 'reparacion' in user_message_lower or 'reparar' in user_message_lower:
-        response = "¡Claro! Te explico nuestros servicios de reparación:\n\n"
+        response = "¡Claro! ¿Qué tipo de reparación necesitas o cuál es el problema principal del equipo? ¿Tienes un presupuesto?\n\n"
+        # Podemos listar opciones si el usuario especifica o pregunta por general
+        # if '(tipo de reparación)' in user_message_lower:
+        # (Lógica para filtrar por tipo/presupuesto - más compleja sin estado)
+        # else:
+        response += "Ofrecemos servicios de reparación como:\n\n"
         for servicio, detalles in servicios['reparacion'].items():
             response += f"**{servicio.title()}**\n"
             response += f"Precio: {detalles['precio']}\n"
@@ -432,7 +451,12 @@ def send_message():
         return jsonify({'response': response})
 
     elif 'mantenimiento' in user_message_lower:
-        response = "¡Por supuesto! Aquí están nuestros servicios de mantenimiento:\n\n"
+        response = "¡Por supuesto! ¿Te interesa el mantenimiento preventivo o correctivo? ¿Tienes algún detalle del problema o un presupuesto?\n\n"
+        # Podemos listar opciones si el usuario especifica o pregunta por general
+        # if '(tipo de mantenimiento)' in user_message_lower:
+        # (Lógica para filtrar por tipo/presupuesto - más compleja sin estado)
+        # else:
+        response += "Aquí están nuestros servicios de mantenimiento:\n\n"
         for servicio, detalles in servicios['mantenimiento'].items():
             response += f"**{servicio.title()}**\n"
             response += f"Precio: {detalles['precio']}\n"
